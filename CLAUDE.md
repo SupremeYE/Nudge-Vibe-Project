@@ -6,16 +6,16 @@ RAG 기반 채팅으로 질의응답하는 개인 지식 관리 PWA
 
 ## 기술 스택
 - Frontend: Next.js 15 (App Router), TypeScript, Tailwind CSS, shadcn/ui
-- Backend: Supabase (PostgreSQL + pgvector + Edge Functions + Auth)
-- AI: Claude API (요약/카테고리/태그 추출), text-embedding-3-small (벡터)
-- 스크래핑: Jina AI (r.jina.ai)
+- Backend: Supabase (PostgreSQL + pgvector + Edge Functions + Auth / Google OAuth)
+- AI: GPT-4o mini (기본) / Claude Haiku / Gemini Flash (교체 가능한 멀티모델 구조), text-embedding-3-small (벡터)
+- 스크래핑: OG태그 파싱 (즉시) + Jina AI r.jina.ai (본문)
 - 자동화: n8n (별도 서버)
 - 알림: PWA Web Push Notification
 
 ## 시스템 구조
 
 ### 수집 레이어
-- 수동: PWA Web Share Target API → 링크 저장
+- 수동: PWA Web Share Target API → /share 페이지 → 링크 저장
 - 자동: n8n 워크플로우 (RSS, Twitter/X 북마크, 뉴스레터)
 
 ### 처리 레이어
@@ -74,7 +74,10 @@ RAG 기반 채팅으로 질의응답하는 개인 지식 관리 PWA
 - [ ] Phase 1: Next.js 15 초기화 + Supabase 연동 완료
 - [ ] Phase 2: DB 스키마 + migration
 - [ ] Phase 3: 링크 저장 파이프라인
-              (OG태그 파싱 즉시 + AI 요약 비동기 + Share Target API)
+              - OG태그 파싱 즉시 표시
+              - AI 요약 비동기 처리 (Vercel waitUntil, GPT-4o mini 기본, 모델 교체 가능한 구조)
+              - Share Target API
+              - AI 모델 설정 옵션 (GPT-4o mini / Claude Haiku / Gemini Flash)
 - [ ] Phase 4: PWA UI
               (카드뷰, 폴더 사이드바, 검색/필터)
 - [ ] Phase 5: 취향 인사이트

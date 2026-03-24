@@ -32,6 +32,8 @@
 |--------|------|
 | Frontend | Next.js 15 (App Router), TypeScript, Tailwind CSS, shadcn/ui |
 | Backend | Supabase (PostgreSQL + pgvector + Edge Functions + Auth) |
+| 인증 | Supabase Auth — Google OAuth |
+| AI 비동기 | Vercel `waitUntil` (Next.js API Route) |
 | AI 요약/분류 | GPT-4o mini (기본) / Claude Haiku / Gemini Flash (교체 가능 구조) |
 | AI 임베딩 | OpenAI text-embedding-3-small → pgvector(1536차원) |
 | 스크래핑 | OG태그 파싱 (즉시, 서버사이드) + Jina AI r.jina.ai (본문 추출) |
@@ -58,7 +60,7 @@
 - URL 입력 → OG태그(title, description, image) 즉시 파싱
 - AI 요약/카테고리/태그 비동기 처리 (저장 후 백그라운드 실행)
 - 기본 AI 모델: GPT-4o mini (설정에서 Claude Haiku / Gemini Flash로 변경 가능)
-- PWA Web Share Target API 지원 (모바일 공유 버튼 → 앱으로 전달)
+- PWA Web Share Target API 지원 → `/share` 전용 페이지에서 처리
 - 설정 페이지에서 AI 모델 선택 옵션 제공
 
 ### Phase 4 — PWA UI
@@ -103,16 +105,11 @@
 
 ## 5. 누락되거나 모호한 스펙
 
-### 5-1. 인증 (Auth)
-- Supabase Auth를 쓰는 것으로 명시되어 있으나 **로그인 방식이 정의되지 않음**
-  - 이메일/패스워드? Google OAuth? Magic Link?
-  - 멀티 유저 지원인지, 1인용 개인 앱인지 불명확
+### 5-1. ~~인증 (Auth)~~ ✅ 결정
+- **Google OAuth** (Supabase Auth 연동)
 
-### 5-2. AI 요약 비동기 처리 방식
-- "비동기 처리"라고만 명시 — 구체적 구현 방식 미정
-  - 옵션 A: Supabase Edge Function + DB trigger
-  - 옵션 B: Next.js API Route에서 `waitUntil` (Vercel)
-  - 옵션 C: n8n 워크플로우에 위임
+### 5-2. ~~AI 요약 비동기 처리 방식~~ ✅ 결정
+- **Vercel `waitUntil`** — Next.js API Route에서 응답 반환 후 백그라운드 처리
 
 ### 5-3. Jina AI 사용 시점
 - OG태그는 즉시 파싱, Jina AI 본문 추출은 언제 실행하는지 불명확
@@ -126,9 +123,8 @@
 - CLAUDE.md에 "Supabase Storage: 대표 이미지 캐싱" 언급
   - 캐싱 로직(언제 저장, 만료 정책) 미정의
 
-### 5-6. Share Target API 응답 흐름
-- 공유 받은 URL을 어떤 페이지에서 처리하는지 라우팅 미정
-  - `/share` 전용 라우트? 메인 페이지에서 처리?
+### 5-6. ~~Share Target API 응답 흐름~~ ✅ 결정
+- **`/share` 전용 페이지** — 공유받은 URL을 처리하는 독립 라우트
 
 ### 5-7. 취향 인사이트 갱신 주기
 - 실시간 업데이트? 일별 배치? 항목 저장 시마다 재계산?
@@ -169,11 +165,11 @@
 
 ## 7. 미결 결정사항 (TODO)
 
-- [ ] **인증 방식 결정** — 이메일/패스워드 vs Google OAuth vs Magic Link
-- [ ] **AI 비동기 처리 방식 결정** — Edge Function trigger vs Vercel waitUntil vs n8n
+- [x] **인증 방식 결정** — Google OAuth
+- [x] **AI 비동기 처리 방식 결정** — Vercel `waitUntil`
+- [x] **Share Target 라우팅 설계** — `/share` 전용 페이지
 - [ ] **Jina AI 호출 시점 결정** — 즉시 vs 지연 vs 온디맨드
 - [ ] **하이라이트 테이블 스키마 추가** — Phase 4 전에 migration 필요
-- [ ] **Share Target 라우팅 설계** — `/share` 전용 페이지 여부
 - [ ] **이미지 캐싱 정책 정의** — Storage 업로드 시점 + 만료 처리
 - [ ] **취향 인사이트 갱신 주기 결정** — 실시간 vs 배치
 - [ ] **n8n 연동 user_id 처리 방식** — 단일 유저 고정 vs 다중 유저 매핑

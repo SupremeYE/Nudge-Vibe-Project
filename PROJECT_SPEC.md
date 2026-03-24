@@ -34,7 +34,7 @@
 | Backend | Supabase (PostgreSQL + pgvector + Edge Functions + Auth) |
 | 인증 | Supabase Auth — Google OAuth |
 | AI 비동기 | Vercel `waitUntil` (Next.js API Route) |
-| AI 요약/분류 | GPT-4o mini (기본) / Claude Haiku / Gemini Flash (교체 가능 구조) |
+| AI 요약/분류 | GPT-4o mini (기본) / Gemini Flash (교체 가능 구조, ANTHROPIC_API_KEY 미발급으로 Claude 제외) |
 | AI 임베딩 | OpenAI text-embedding-3-small → pgvector(1536차원) |
 | 스크래핑 | OG태그 파싱 (즉시, 서버사이드) + Jina AI r.jina.ai (본문 추출) |
 | 자동화 | n8n (별도 서버, RSS/Twitter/뉴스레터 수집) |
@@ -59,17 +59,20 @@
 ### Phase 3 — 링크 저장 파이프라인
 - URL 입력 → OG태그(title, description, image) 즉시 파싱
 - AI 요약/카테고리/태그 비동기 처리 (저장 후 백그라운드 실행)
-- 기본 AI 모델: GPT-4o mini (설정에서 Claude Haiku / Gemini Flash로 변경 가능)
+- 기본 AI 모델: GPT-4o mini (설정에서 Gemini Flash로 변경 가능, Claude Haiku 제외)
 - PWA Web Share Target API 지원 → `/share` 전용 페이지에서 처리
 - 설정 페이지에서 AI 모델 선택 옵션 제공
 
-### Phase 4 — PWA UI
-- 카드뷰: 썸네일 + 제목 + 요약 + 태그 + 읽기 상태
-- 폴더 사이드바: 중첩 폴더 트리, 드래그 앤 드롭
-- 검색: 텍스트 검색 (title/summary) + 태그 필터 + 카테고리 필터
+### Phase 4 — PWA UI (Figma Make 기준 구현)
+- 카드뷰: 썸네일 + 제목 + 요약 + 태그 + 읽기 상태 (링크/음악/사진/메모 타입별 카드 디자인)
+- 폴더 사이드바: 중첩 폴더 트리, 데스크톱 접이식
+- 검색: 텍스트 검색 (title/tags) + 카테고리 필터 + 의도 태그 필터
 - 읽기 상태 토글 (unread / reading / done)
 - 듀얼 뷰: 원본 페이지 + AI 요약 나란히 보기
 - 하이라이트 + 메모: 항목 내 특정 문장 저장
+- 퀵 노트: 채팅 UI로 텍스트 빠르게 기록, 메모 폴더 자동 저장, AI 태그 분류
+- AI 모델 설정 화면: GPT-4o mini / Gemini Flash 선택
+- 폴더 테마 레이아웃: 음악(vinyl) / 독서(library) / 기본(default)
 
 ### Phase 5 — 취향 인사이트
 - 전체 저장 항목 분석 (카테고리 분포, 태그 빈도, 시간대 패턴)
@@ -99,7 +102,9 @@
 |-------|------|
 | Phase 1: 초기화 | ✅ 완료 |
 | Phase 2: DB 스키마 | ✅ 완료 |
-| Phase 3 ~ 8 | 대기 |
+| Phase 3: 링크 저장 파이프라인 | ✅ 완료 (코드 완성, DB 연결 대기) |
+| Phase 4: PWA UI | 🔄 진행 중 (Figma Make 코드 확보, 통합 작업 예정) |
+| Phase 5 ~ 8 | 대기 |
 
 ---
 

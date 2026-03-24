@@ -4,6 +4,27 @@
 
 ---
 
+## 2026-03-25
+
+### 추가
+- `components/figma_ui_code/` — Figma Make로 제작한 PWA UI 코드 (이유: Phase 4 UI 기준 컴포넌트)
+- `CLAUDE.md` UI 규칙 섹션 — Figma Make 컴포넌트 기준 구현, 반응형 필수, UI 수정 전 사용자 확인 의무화
+
+### 삭제
+- `lib/ai/summarize.ts`의 `callClaudeHaiku` 함수 및 `"claude-haiku"` AIModel 타입 (이유: ANTHROPIC_API_KEY 미발급으로 지원 불가)
+- `app/settings/page.tsx`의 Claude Haiku 모델 선택 옵션 (이유: 동일)
+- `CLAUDE.md` 환경변수의 `ANTHROPIC_API_KEY` (이유: 미발급)
+
+### 변경
+- `CLAUDE.md` 기술 스택 AI — Claude Haiku 제거, GPT-4o mini / Gemini Flash만 유지
+- `CLAUDE.md` 처리 레이어 — "Claude API" → "OpenAI / Gemini API"
+- `CLAUDE.md` Phase 3 설명 — AI 모델 설정 옵션 업데이트 (Claude Haiku 제거)
+- `CLAUDE.md` Phase 4 항목 — 퀵 노트, AI 모델 설정 화면, 폴더 테마 레이아웃 추가
+- `CLAUDE.md` 추가 기능 — 퀵 노트 기능 항목 추가
+- `CLAUDE.md` 환경변수 — OPENAI_API_KEY 설명 "GPT-4o mini 요약 + embedding"으로 수정, GEMINI_API_KEY 추가
+
+---
+
 ## 2026-03-24
 
 ### 추가

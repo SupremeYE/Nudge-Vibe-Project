@@ -7,7 +7,7 @@ RAG 기반 채팅으로 질의응답하는 개인 지식 관리 PWA
 ## 기술 스택
 - Frontend: Next.js 15 (App Router), TypeScript, Tailwind CSS, shadcn/ui
 - Backend: Supabase (PostgreSQL + pgvector + Edge Functions + Auth / Google OAuth)
-- AI: GPT-4o mini (기본) / Claude Haiku / Gemini Flash (교체 가능한 멀티모델 구조), text-embedding-3-small (벡터)
+- AI: GPT-4o mini (기본) / Gemini Flash (교체 가능한 멀티모델 구조), text-embedding-3-small (벡터)
 - 스크래핑: OG태그 파싱 (즉시) + Jina AI r.jina.ai (본문)
 - 자동화: n8n (별도 서버)
 - 알림: PWA Web Push Notification
@@ -20,7 +20,7 @@ RAG 기반 채팅으로 질의응답하는 개인 지식 관리 PWA
 
 ### 처리 레이어
 - Jina AI로 URL 본문 스크래핑
-- Claude API → 요약 + 자동 카테고리 분류 + 태그 추출
+- OpenAI / Gemini API → 요약 + 자동 카테고리 분류 + 태그 추출
 - text-embedding-3-small → pgvector 저장
 
 ### 저장 레이어
@@ -39,6 +39,10 @@ RAG 기반 채팅으로 질의응답하는 개인 지식 관리 PWA
 - 주간 다이제스트: 매주 저장 내용 요약 Push
 - 하이라이트 + 메모: 항목 내 특정 문장 저장
 - 듀얼 뷰: 원본 + AI 요약 나란히 보기
+- 퀵 노트: 카카오 나에게 보내기처럼 텍스트 빠르게 기록, 채팅 UI로 타임라인 쌓임, 자동으로 "메모" 폴더 저장, AI 태그 자동 분류
+
+### 향후 기능 (미착수)
+- 이미지 OCR 저장: Gemini Vision API로 이미지 속 텍스트 추출 및 저장 (GEMINI_API_KEY 기발급)
 
 ## DB 스키마
 
@@ -70,16 +74,24 @@ RAG 기반 채팅으로 질의응답하는 개인 지식 관리 PWA
 - 환경변수는 .env.local에, 절대 하드코딩 금지
 - Supabase RLS 정책 항상 포함
 
+## UI 규칙
+- 기본 UI는 Figma Make로 제작된 컴포넌트 기준으로 구현
+- 모바일/웹 반응형 구현 필수
+- UI 수정이 필요한 경우 작업 전에 반드시 사용자에게 먼저 알리고 확인 받기
+- 사용자가 거절하면 UI 수정 금지
+
 ## 진행 상태
-- [ ] Phase 1: Next.js 15 초기화 + Supabase 연동 완료
-- [ ] Phase 2: DB 스키마 + migration
-- [ ] Phase 3: 링크 저장 파이프라인
+- [x] Phase 1: Next.js 15 초기화 + Supabase 연동 완료
+- [x] Phase 2: DB 스키마 + migration
+- [x] Phase 3: 링크 저장 파이프라인
               - OG태그 파싱 즉시 표시
               - AI 요약 비동기 처리 (Vercel waitUntil, GPT-4o mini 기본, 모델 교체 가능한 구조)
               - Share Target API
-              - AI 모델 설정 옵션 (GPT-4o mini / Claude Haiku / Gemini Flash)
+              - AI 모델 설정 옵션 (GPT-4o mini / Gemini Flash)
 - [ ] Phase 4: PWA UI
-              (카드뷰, 폴더 사이드바, 검색/필터)
+              (카드뷰, 폴더 사이드바, 검색/필터,
+               퀵 노트, AI 모델 설정 화면,
+               폴더 테마 레이아웃 - 음악/독서/기본)
 - [ ] Phase 5: 취향 인사이트
               (전체 저장 분석, 페르소나/관심사 도출)
 - [ ] Phase 6: RAG 채팅
@@ -91,5 +103,5 @@ RAG 기반 채팅으로 질의응답하는 개인 지식 관리 PWA
 - NEXT_PUBLIC_SUPABASE_URL
 - NEXT_PUBLIC_SUPABASE_ANON_KEY
 - SUPABASE_SERVICE_ROLE_KEY
-- ANTHROPIC_API_KEY
-- OPENAI_API_KEY (embedding용, Phase 6 전까지 불필요)
+- OPENAI_API_KEY (GPT-4o mini 요약 + embedding)
+- GEMINI_API_KEY (Gemini Flash 요약 + 향후 Vision)

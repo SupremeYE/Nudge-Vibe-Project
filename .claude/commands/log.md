@@ -2,6 +2,18 @@
 
 ## 실행 순서
 
+### 0단계 — "향후할일" 처리 (있을 경우에만)
+사용자가 이 명령어를 실행하면서 **"향후할일: xxx"** 형식으로 메시지를 남겼다면:
+- PROGRESS.md 파일을 열어 파일 **맨 아래**에 `## 향후 기능` 섹션을 찾는다.
+- 섹션이 없으면 맨 아래에 새로 생성한다.
+- 아래 형식으로 항목을 추가한다:
+  ```
+  ## 향후 기능
+  - [ ] xxx (추가일: YYYY-MM-DD)
+  ```
+- 항목이 여러 개면 각각 별도 줄로 추가한다.
+- "향후할일:"이 없으면 이 단계는 건너뛴다.
+
 ### 1단계 — git diff 수집
 다음 명령어들을 실행해서 변경 내용을 파악한다:
 - `git diff HEAD` — 스테이지되지 않은 변경사항
@@ -40,11 +52,12 @@ PROJECT_SPEC.md와 CLAUDE.md를 읽은 뒤 다음을 수행한다:
    - 잠재적 버그 가능성
    - 미결 결정사항 (TODO) — 이미 결정된 항목은 `[x]`로 표시
 
-### 4단계 — 커밋
+### 4단계 — 커밋 및 push
 ```
-git add PROGRESS.md PROJECT_SPEC.md
+git add PROGRESS.md PROJECT_SPEC.md CLAUDE.md
 git commit -m "docs: progress update YYYY-MM-DD"
+git push origin main
 ```
 오늘 날짜를 YYYY-MM-DD 형식으로 채워서 커밋 메시지를 작성한다.
 
-커밋 완료 후 "✅ /log 완료 — PROGRESS.md, PROJECT_SPEC.md 업데이트 및 커밋 완료" 라고 출력한다.
+커밋 완료 후 "✅ /log 완료 — PROGRESS.md, PROJECT_SPEC.md 업데이트 및 커밋/push 완료" 라고 출력한다.
